@@ -1,3 +1,6 @@
+// further reading
+// http://hermanradtke.com/2015/05/03/string-vs-str-in-rust-functions.html
+// http://stackoverflow.com/a/29998582/105282
 fn main() {
     let foo = "foo";
     let bar = "bar".to_string(); // String::from("bar") is okay too
