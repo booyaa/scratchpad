@@ -1,0 +1,8 @@
+[package]
+name = "json"
+version = "0.1.0"
+authors = ["booyaa <booyaabooyaabooyaa@gmail.com>"]
+
+[dependencies]
+serde = "0.8"
+serde_json = "0.8"
