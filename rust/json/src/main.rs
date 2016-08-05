@@ -40,8 +40,14 @@ struct Location {
     lat: f64,
     lng: f64,
 }
+
+// learn: http://hermanradtke.com/2015/09/21/get-data-from-a-url-rust.html
+// learn: https://github.com/servo/content-blocker/blob/master/src/parse.rs
+// learn: http://serde-rs.github.io/json/serde_json/
+
 fn parse(raw: String) -> Result<GpsLocation, Error> {
     let json_resp: Value = try!(serde_json::from_str(&raw).map_err(|_| Error::JSON));
+
     let json_obj = try!(json_resp.as_object().ok_or(Error::NotAnObject));
 
     let accuracy = try!(try!(json_obj.get("accuracy").ok_or(Error::MissingValue))
