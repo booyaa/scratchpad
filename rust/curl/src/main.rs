@@ -1,8 +1,6 @@
 extern crate curl;
 use curl::easy::{Easy, List};
 
-const BASE_URL: &'static str = "http://localhost:32768/post";
-const BASE_PARAMS: &'static str = "?browser=firefox&sensor=true";
 
 
 fn main() {
