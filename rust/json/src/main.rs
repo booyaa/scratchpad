@@ -1,10 +1,15 @@
-#![feature(custom_derive)]
+// #![feature(custom_derive)]
+//
+// extern crate serde;
+// extern crate serde_json;
+//
+// use serde_json::Value;
+
+#![feature(custom_derive, plugin)]
+#![plugin(serde_macros)]
 
 extern crate serde;
 extern crate serde_json;
-
-use serde_json::Value;
-
 
 #[derive(Debug, PartialEq)]
 pub enum Error {
@@ -29,13 +34,15 @@ impl From<std::num::ParseFloatError> for Error {
     }
 }
 
-#[derive(Debug, PartialEq)]
+// #[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct GpsLocation {
     accuracy: u32,
     location: Location,
 }
 
-#[derive(Debug, PartialEq)]
+// #[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct Location {
     lat: f64,
     lng: f64,
@@ -45,30 +52,35 @@ struct Location {
 // learn: https://github.com/servo/content-blocker/blob/master/src/parse.rs
 // learn: http://serde-rs.github.io/json/serde_json/
 
+// fn old_parse(raw: String) -> Result<GpsLocation, Error> {
+//     let json_resp: Value = try!(serde_json::from_str(&raw).map_err(|_| Error::JSON));
+//
+//     let json_obj = try!(json_resp.as_object().ok_or(Error::NotAnObject));
+//
+//     let accuracy = try!(try!(json_obj.get("accuracy").ok_or(Error::MissingValue))
+//                             .to_string()
+//                             .parse::<u32>());
+//     let location = try!(json_obj.get("location").ok_or(Error::MissingValue)); // gets object?
+//     let location_object = try!(location.as_object().ok_or(Error::NotAnObject));
+//     let lat = try!(try!(location_object.get("lat").ok_or(Error::MissingValue))
+//                        .to_string()
+//                        .parse::<f64>());
+//     let lng = try!(try!(location_object.get("lng").ok_or(Error::MissingValue))
+//                        .to_string()
+//                        .parse::<f64>());
+//
+//     Ok(GpsLocation {
+//         accuracy: accuracy,
+//         location: Location {
+//             lat: lat,
+//             lng: lng,
+//         },
+//     })
+// }
+
 fn parse(raw: String) -> Result<GpsLocation, Error> {
-    let json_resp: Value = try!(serde_json::from_str(&raw).map_err(|_| Error::JSON));
-
-    let json_obj = try!(json_resp.as_object().ok_or(Error::NotAnObject));
-
-    let accuracy = try!(try!(json_obj.get("accuracy").ok_or(Error::MissingValue))
-                            .to_string()
-                            .parse::<u32>());
-    let location = try!(json_obj.get("location").ok_or(Error::MissingValue)); // gets object?
-    let location_object = try!(location.as_object().ok_or(Error::NotAnObject));
-    let lat = try!(try!(location_object.get("lat").ok_or(Error::MissingValue))
-                       .to_string()
-                       .parse::<f64>());
-    let lng = try!(try!(location_object.get("lng").ok_or(Error::MissingValue))
-                       .to_string()
-                       .parse::<f64>());
-
-    Ok(GpsLocation {
-        accuracy: accuracy,
-        location: Location {
-            lat: lat,
-            lng: lng,
-        },
-    })
+    let gps: GpsLocation = try!(serde_json::from_str(&raw).map_err(|_| Error::JSON));
+    Ok(gps)
 }
 
 fn main() {
