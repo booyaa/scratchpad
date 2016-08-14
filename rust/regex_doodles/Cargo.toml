@@ -1,0 +1,7 @@
+[package]
+name = "regex_doodles"
+version = "0.1.0"
+authors = ["booyaa <booyaabooyaabooyaa@gmail.com>"]
+
+[dependencies]
+regex = "0.1"
