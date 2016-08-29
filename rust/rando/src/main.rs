@@ -45,7 +45,6 @@ fn dice<R: Rng>(faces: &Range<u32>, rng: &mut R) -> u32 {
 
 
 fn main() {
-
     let mut rng = rand::thread_rng();
     let faces = Range::new(1, 6);
     for i in 1..10 {
