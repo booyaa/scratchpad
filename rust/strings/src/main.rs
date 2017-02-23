@@ -5,57 +5,28 @@
 // use std::iter::FromIterator;
 
 
-
+// http://stackoverflow.com/questions/31799482/efficiently-extract-prefix-substrings
+// http://stackoverflow.com/questions/37157926/is-there-a-method-like-javascripts-substr-in-rust/37158376#37158376
 fn main() {
-    assert_eq!(dna::RibonucleicAcid::new("CGA"),
-               dna::RibonucleicAcid::new("CGA"));
-    assert!(dna::RibonucleicAcid::new("CGA") != dna::RibonucleicAcid::new("AGC"));
+  let foo = "hello";
+  let offset = foo.len() - 2;
+  assert_eq!(offset, 3);
 
+  println!("{:?}", &foo[offset..]); 
+  println!("{:?}", &foo[-2..]);
 }
 
-mod dna {
-    #[derive(Debug, PartialEq)]
-    pub struct RibonucleicAcid<'a> {
-        strand: &'a str,
-    }
-
-    impl<'a> RibonucleicAcid<'a> {
-        pub fn new(strand: &str) -> RibonucleicAcid {
-            RibonucleicAcid { strand: strand }
-        }
-    }
-
-    #[derive(Debug, PartialEq)]
-    pub struct DeoxyribonucleicAcid<'a> {
-        strand: &'a str,
-    }
-
-    impl<'a> DeoxyribonucleicAcid<'a> {
-        pub fn new(strand: &str) -> DeoxyribonucleicAcid {
-            DeoxyribonucleicAcid { strand: strand }
-        }
-        pub fn to_rna(&self) -> RibonucleicAcid {
-            let mut strung = String::new();
-            for c in self.strand
-                         .chars()
-                         .map(|x| match x {
-                             'G' => 'C',
-                             'C' => 'G',
-                             'T' => 'A',
-                             'A' => 'U',
-                             _ => ' ',
-                         }) {
-                strung.push(c);
-            }
-
-            RibonucleicAcid::new(strung.as_str())
-        }
-    }
+trait Substrings {
+    fn right(&self, idx : isize) -> &str;
 }
 
-// fn old_main() {
-// println!("{:?}", foo_string());
-// let bar = "foo";
+impl Substrings for str {
+    fn right(&self, idx : isize) -> &str {
+        let size = &self.len();
+        let offset = *size-idx;
+        &self[offset..]
+    }
+}
 //
 // println!("{} {}", bar, bar.replace("foo", "bar"));
 //
